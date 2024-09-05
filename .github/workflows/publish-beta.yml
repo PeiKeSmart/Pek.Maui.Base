@@ -1,0 +1,29 @@
+name: publish-beta
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+        - 'Pek.Maui.Base/**'
+  workflow_dispatch:
+
+jobs:
+  build-publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 9.x
+    - name: Restore
+      run: |
+        dotnet restore Pek.Maui.Base/Pek.Maui.Base.csproj
+    - name: Build
+      run: |
+        dotnet pack --no-restore --version-suffix $(date "+%Y.%m%d-beta%H%M") -c Release -o out Pek.Maui.Base/Pek.Maui.Base.csproj
+    - name: Publish
+      run: |
+        dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.nugetKey }}
