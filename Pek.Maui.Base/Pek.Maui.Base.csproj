@@ -21,8 +21,8 @@
   <PropertyGroup>
     <AssemblyName>Pek.Maui.Base</AssemblyName>
     <RootNamespace>Pek</RootNamespace>
-    <AssemblyTitle>DH组件核心库</AssemblyTitle>
-    <Description>核心基础组件</Description>
+    <AssemblyTitle>DH组件Maui核心库</AssemblyTitle>
+    <Description>Maui核心基础组件</Description>
     <Company>湖北登灏科技有限公司</Company>
     <Copyright>©2020-2024 湖北登灏科技有限公司</Copyright>
     <VersionPrefix>3.7</VersionPrefix>
@@ -44,7 +44,7 @@
     <RepositoryUrl>https://github.com/PeiKeSmart/DH.NCore</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>湖北登灏科技有限公司;DH组件;DH;$(AssemblyName)</PackageTags>
-    <PackageReleaseNotes>核心基础组件</PackageReleaseNotes>
+    <PackageReleaseNotes>Maui核心基础组件</PackageReleaseNotes>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
