@@ -33,7 +33,7 @@
     <OutputPath>..\Bin</OutputPath>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
-    <NoWarn>1701;1702;NU5104;NU1505;NETSDK1138;CS7035</NoWarn>
+    <NoWarn>1701;1702;1591;NU5104;NU1505;NETSDK1138;CS7035;CS0067</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <!--<IsPackable>true</IsPackable>-->
