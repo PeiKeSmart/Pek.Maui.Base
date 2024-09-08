@@ -53,6 +53,6 @@ public static class MessageBox
     /// <param name="title">消息标题</param>
     /// <param name="page">页面</param>
     /// <returns>要执行的任务</returns>
-    public static Task ShowAlert(this Page page, String message, String? title = null) => page.DisplayAlert(string.IsNullOrWhiteSpace(title) ? ALERT_TITLE : title, message, "OK");
+    public static Task ShowAlert(this Page page, String message, String? title = null) => page.DisplayAlert(title.IsNullOrWhiteSpace() ? ALERT_TITLE : title, message, "OK");
 
 }
