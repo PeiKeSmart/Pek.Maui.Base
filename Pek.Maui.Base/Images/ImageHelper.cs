@@ -101,7 +101,7 @@ public static class ImageHelper
     /// <param name="image"></param>
     /// <param name="threshold">定义阈值</param>
     /// <returns></returns>
-    public static BitArray ProcessBitArray(SKBitmap image, Int32 threshold = 180)
+    public static IList<Int32> ProcessBitArray(SKBitmap image, Int32 threshold = 180)
     {
         var width = image.Width;
         var height = image.Height;
@@ -112,32 +112,33 @@ public static class ImageHelper
         // 获取原始图像的像素数据
         var originalPixels = image.Pixels;
 
-        var bitArray = new BitArray(image.Width * image.Height);
-        var bitArrayPos = 0;
+        var list = new List<Int32>();
 
         // 批量处理像素
-        for (var i = 0; i < width * height; i++)
+        for (var i = 0; i < width; i++)
         {
-            var color = originalPixels[i];
-
-            // 计算灰度值
-            var gray = (byte)(color.Red * 0.3 + color.Green * 0.59 + color.Blue * 0.11);
-
-            // 二值化处理
-            var newColor = gray < threshold ? new SKColor(0, 0, 0) : new SKColor(255, 255, 255);
-
-            if (newColor.Red > 0 || newColor.Green > 0 || newColor.Blue > 0)
+            for (var j = 0; j < height; j++)
             {
-                bitArray[bitArrayPos] = true;
+                var color = image.GetPixel(i, j);
+
+                // 计算灰度值
+                var gray = (byte)(color.Red * 0.3 + color.Green * 0.59 + color.Blue * 0.11);
+
+                // 二值化处理
+                var newColor = gray < threshold ? new SKColor(0, 0, 0) : new SKColor(255, 255, 255);
+
+                if (newColor.Red > 0 || newColor.Green > 0 || newColor.Blue > 0)
+                {
+                    list.Add(1);
+                }
+                else
+                {
+                    list.Add(0);
+                }
             }
-            else
-            {
-                bitArray[bitArrayPos] = false;
-            }
-            bitArrayPos++;
         }
 
-        return bitArray;
+        return list;
     }
 
     /// <summary>
