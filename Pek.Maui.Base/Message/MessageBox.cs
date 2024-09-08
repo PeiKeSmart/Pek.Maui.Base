@@ -41,12 +41,6 @@ public static class MessageBox
     }
 
     /// <summary>
-    /// 在调试控制台中编写调试消息
-    /// </summary>
-    /// <param name="message">要显示的消息</param>
-    public static void Debug(string message) => System.Diagnostics.Debug.WriteLine(message);
-
-    /// <summary>
     /// 显示消息
     /// </summary>
     /// <param name="message">要显示的消息</param>
