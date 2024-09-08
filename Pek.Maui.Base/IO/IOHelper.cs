@@ -1,5 +1,4 @@
-﻿using System.Buffers;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace Pek;
 
@@ -31,7 +30,7 @@ public static class IOHelper
         if (len > MaxSafeArraySize) throw new XException("Security required, reading large variable length arrays is not allowed {0:n0}>{1:n0}", len, MaxSafeArraySize);
 
         var buf = new Byte[len];
-        des.ReadExactly(buf);
+        des.Read(buf, 0, buf.Length);
         return buf;
     }
 
