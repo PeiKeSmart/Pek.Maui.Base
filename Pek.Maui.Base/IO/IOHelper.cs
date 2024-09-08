@@ -1,11 +1,40 @@
-﻿using System.Globalization;
+﻿using System.Buffers;
+using System.Globalization;
 
 namespace Pek;
 
 /// <summary>IO工具类</summary>
 public static class IOHelper
 {
+    #region 属性
+    /// <summary>最大安全数组大小。超过该大小时，读取数据操作将强制失败，默认1024*1024</summary>
+    /// <remarks>
+    /// 这是一个保护性设置，避免解码错误数据时读取了超大数组导致应用崩溃。
+    /// 需要解码较大二进制数据时，可以适当放宽该阈值。
+    /// </remarks>
+    public static Int32 MaxSafeArraySize { get; set; } = 1024 * 1024;
+    #endregion
+
     #region 复制数据流
+    /// <summary>读取字节数组，先读取压缩整数表示的长度</summary>
+    /// <param name="des"></param>
+    /// <returns></returns>
+    public static Byte[] ReadArray(this Stream des)
+    {
+        var len = des.ReadEncodedInt();
+        if (len <= 0) return [];
+
+        // 避免数据错乱超长
+        //if (des.CanSeek && len > des.Length - des.Position) len = (Int32)(des.Length - des.Position);
+        if (des.CanSeek && len > des.Length - des.Position) throw new XException("ReadArray error, variable length array length is {0}, but the available data for the data stream is only {1}", len, des.Length - des.Position);
+
+        if (len > MaxSafeArraySize) throw new XException("Security required, reading large variable length arrays is not allowed {0:n0}>{1:n0}", len, MaxSafeArraySize);
+
+        var buf = new Byte[len];
+        des.ReadExactly(buf);
+        return buf;
+    }
+
     /// <summary>复制数组</summary>
     /// <param name="src">源数组</param>
     /// <param name="offset">起始位置。一般从0开始</param>
@@ -97,6 +126,32 @@ public static class IOHelper
             bts[i] = Byte.Parse(data.Substring(startIndex + 2 * i, 2), NumberStyles.HexNumber);
         }
         return bts;
+    }
+    #endregion
+
+    #region 7位压缩编码整数
+    /// <summary>以压缩格式读取32位整数</summary>
+    /// <param name="stream">数据流</param>
+    /// <returns></returns>
+    public static Int32 ReadEncodedInt(this Stream stream)
+    {
+        Byte b;
+        UInt32 rs = 0;
+        Byte n = 0;
+        while (true)
+        {
+            var bt = stream.ReadByte();
+            if (bt < 0) throw new Exception($"The data stream is out of range! The integer read is {rs: n0}");
+            b = (Byte)bt;
+
+            // 必须转为Int32，否则可能溢出
+            rs |= (UInt32)((b & 0x7f) << n);
+            if ((b & 0x80) == 0) break;
+
+            n += 7;
+            if (n >= 32) throw new FormatException("The number value is too large to read in compressed format!");
+        }
+        return (Int32)rs;
     }
     #endregion
 }
