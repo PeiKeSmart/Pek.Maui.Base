@@ -27,7 +27,7 @@ public class LiteDBHelper
     /// <param name="liteDbPath"></param>
     /// <param name="liteDbCollectionName"></param>
     /// <returns></returns>
-    public static Boolean TruncateCollection(String liteDbPath, String liteDbCollectionName)
+    public static Boolean TruncateCollection(String liteDbCollectionName, String liteDbPath)
     {
         var liteDatabase = GetDatabase(liteDbPath);
 
@@ -41,7 +41,7 @@ public class LiteDBHelper
     /// <param name="liteDbPath"></param>
     /// <param name="liteDbCollectionName"></param>
     /// <returns></returns>
-    public static ILiteCollection<T> GetCollection<T>(String liteDbPath, String liteDbCollectionName)
+    public static ILiteCollection<T> GetCollection<T>(String liteDbCollectionName, String liteDbPath)
     {
         ILiteCollection<T>? liteCollection = null;
 
@@ -60,7 +60,7 @@ public class LiteDBHelper
     /// <param name="liteDbPath"></param>
     /// <param name="liteDbCollectionName"></param>
     /// <returns></returns>
-    public static IEnumerable<T> FindAll<T>(String liteDbPath, String liteDbCollectionName)
+    public static IEnumerable<T> FindAll<T>(String liteDbCollectionName, String liteDbPath)
     {
         var liteCollection = GetCollection<T>(liteDbPath, liteDbCollectionName);
         return liteCollection.FindAll();
@@ -74,7 +74,7 @@ public class LiteDBHelper
     /// <param name="liteDbCollectionName"></param>
     /// <param name="predicate"></param>
     /// <returns></returns>
-    public static IEnumerable<T> Find<T>(String liteDatabasePath, String liteDbCollectionName, System.Linq.Expressions.Expression<Func<T, Boolean>> predicate)
+    public static IEnumerable<T> Find<T>(String liteDbCollectionName, System.Linq.Expressions.Expression<Func<T, Boolean>> predicate, String liteDatabasePath)
     {
         var liteCollection = GetCollection<T>(liteDatabasePath, liteDbCollectionName);
         return liteCollection.Find(predicate);
@@ -88,7 +88,7 @@ public class LiteDBHelper
     /// <param name="liteDbCollectionName"></param>
     /// <param name="liteDBQuery"></param>
     /// <returns></returns>
-    public static IEnumerable<T> Find<T>(String liteDbPath, String liteDbCollectionName, Query liteDBQuery)
+    public static IEnumerable<T> Find<T>(String liteDbCollectionName, Query liteDBQuery, String liteDbPath)
     {
         var liteCollection = GetCollection<T>(liteDbPath, liteDbCollectionName);
         return liteCollection.Find(liteDBQuery);
@@ -102,7 +102,7 @@ public class LiteDBHelper
     /// <param name="liteDbCollectionName"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public static T FindById<T>(String liteDbPath, String liteDbCollectionName, Int32 id)
+    public static T FindById<T>(String liteDbCollectionName, Int32 id, String liteDbPath)
     {
         var liteCollection = GetCollection<T>(liteDbPath, liteDbCollectionName);
         return liteCollection.FindById(new BsonValue(id));
@@ -116,7 +116,7 @@ public class LiteDBHelper
     /// <param name="liteDbCollectionName"></param>
     /// <param name="item"></param>
     /// <returns></returns>
-    public static Boolean Insert<T>(String liteDbPath, String liteDbCollectionName, T item)
+    public static Boolean Insert<T>(String liteDbCollectionName, T item, String liteDbPath)
     {
         var liteCollection = GetCollection<T>(liteDbPath, liteDbCollectionName);
         var bsonValueInsertResult = liteCollection.Insert(item);
@@ -131,7 +131,7 @@ public class LiteDBHelper
     /// <param name="liteDbCollectionName"></param>
     /// <param name="items"></param>
     /// <returns></returns>
-    public static Boolean Insert<T>(String liteDbPath, String liteDbCollectionName, IEnumerable<T> items)
+    public static Boolean Insert<T>(String liteDbCollectionName, IEnumerable<T> items, String liteDbPath)
     {
         var liteCollection = GetCollection<T>(liteDbPath, liteDbCollectionName);
         BsonValue? bsonValueInsertResult = liteCollection.Insert(items);
@@ -146,7 +146,7 @@ public class LiteDBHelper
     /// <param name="liteDbCollectionName"></param>
     /// <param name="item"></param>
     /// <returns></returns>
-    public static Boolean Update<T>(String liteDbPath, String liteDbCollectionName, T item)
+    public static Boolean Update<T>(String liteDbCollectionName, T item, String liteDbPath)
     {
         var liteCollection = GetCollection<T>(liteDbPath, liteDbCollectionName);
         BsonValue? bsonValueUpdateResult = liteCollection.Update(item);
@@ -161,25 +161,25 @@ public class LiteDBHelper
     /// <param name="liteDbCollectionName"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public static Boolean Delete<T>(String liteDbPath, String liteDbCollectionName, Int32 id)
+    public static Boolean Delete<T>(String liteDbCollectionName, Int32 id, String liteDbPath)
     {
         var liteCollection = GetCollection<T>(liteDbPath, liteDbCollectionName);
         return liteCollection.Delete(id);
     }
 
-    public static Int32 Delete<T>(String liteDbPath, String liteDbCollectionName, System.Linq.Expressions.Expression<Func<T, Boolean>> predicate)
+    public static Int32 Delete<T>(String liteDbCollectionName, System.Linq.Expressions.Expression<Func<T, Boolean>> predicate, String liteDbPath)
     {
         var liteCollection = GetCollection<T>(liteDbPath, liteDbCollectionName);
         return liteCollection.DeleteMany(predicate);
     }
 
-    public static Boolean Exist<T>(String liteDbPath, String liteDbCollectionName, System.Linq.Expressions.Expression<Func<T, Boolean>> predicate)
+    public static Boolean Exist<T>(String liteDbCollectionName, System.Linq.Expressions.Expression<Func<T, Boolean>> predicate, String liteDbPath)
     {
         var liteCollection = GetCollection<T>(liteDbPath, liteDbCollectionName);
         return liteCollection.Exists(predicate);
     }
 
-    public static Boolean Exist<T>(String liteDbPath, String liteDbCollectionName, Query liteDBQuery)
+    public static Boolean Exist<T>(String liteDbCollectionName, Query liteDBQuery, String liteDbPath)
     {
         var liteCollection = GetCollection<T>(liteDbPath, liteDbCollectionName);
         return liteCollection.Exists(liteDBQuery);
