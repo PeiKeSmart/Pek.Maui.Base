@@ -24,8 +24,8 @@
     <AssemblyTitle>DH组件Maui核心库</AssemblyTitle>
     <Description>Maui核心基础组件</Description>
     <Company>湖北登灏科技有限公司</Company>
-    <Copyright>©2020-2024 湖北登灏科技有限公司</Copyright>
-    <VersionPrefix>3.7</VersionPrefix>
+    <Copyright>©2020-2025 湖北登灏科技有限公司</Copyright>
+    <VersionPrefix>4.11</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
     <FileVersion>$(Version)</FileVersion>
@@ -62,9 +62,9 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.0-rc.1.24453.9" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="9.0.3" />
-    <PackageReference Include="Microsoft.Maui.Graphics.Skia" Version="9.0.0-rc.1.24453.9" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="11.1.0" />
+    <PackageReference Include="Microsoft.Maui.Graphics.Skia" Version="9.0.50" />
 	</ItemGroup>
 
   <ItemGroup>
