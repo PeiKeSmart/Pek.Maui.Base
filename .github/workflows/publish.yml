@@ -16,7 +16,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: |
-          8.x
           9.x
 
     - name: Install
@@ -27,13 +26,16 @@ jobs:
     - name: Restore
       run: |
         dotnet restore Pek.Maui.Base/Pek.Maui.Base.csproj
+        dotnet restore Pek.Maui.LiteDB/Pek.Maui.LiteDB.csproj
 
     - name: Get Version
       run: echo "VERSION=$(date '+%Y.%m%d-beta%H%M')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: Build
       run: |
         dotnet pack --version-suffix ${{ env.VERSION }} -c Release -o out Pek.Maui.Base/Pek.Maui.Base.csproj
+        dotnet pack --version-suffix ${{ env.VERSION }} -c Release -o out Pek.Maui.LiteDB/Pek.Maui.LiteDB.csproj
     - name: Publish
       run: |
-        dotnet nuget push .\out\*.nupkg --skip-duplicate --source https://nuget.pkg.github.com/PeiKeSmart/index.json --api-key ${{ github.token }}
+        # dotnet nuget push .\out\*.nupkg --skip-duplicate --source https://nuget.pkg.github.com/PeiKeSmart/index.json --api-key ${{ github.token }}
         dotnet nuget push .\out\*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.nugetKey }}
+        dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://nuget.deng-hao.com/v3/index.json --api-key ${{ secrets.mynugetKey }}
