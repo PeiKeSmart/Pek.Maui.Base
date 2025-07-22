@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pek.Maui.LiteDB", "Pek.Maui.LiteDB\Pek.Maui.LiteDB.csproj", "{6705186C-60AD-4CEF-B482-854930BE7958}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JPush", "JPush", "{3B6CC4BA-3D4F-4DFA-91E2-59EBAB26543D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,8 +41,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{FBE42E89-5662-4E99-B0C1-5AB4FEEA0E38} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{6705186C-60AD-4CEF-B482-854930BE7958} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{3B6CC4BA-3D4F-4DFA-91E2-59EBAB26543D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {323831A1-A95B-40AB-B9AD-36A0BC10C2CB}
