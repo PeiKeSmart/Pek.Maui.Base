@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="JPushTestDemo.MainPage"
+             Title="JPush Test Demo">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+            
+            <Image
+                Source="dotnet_bot.png"
+                HeightRequest="100"
+                Aspect="AspectFit" />
+
+            <Label
+                Text="极光推送测试Demo"
+                Style="{StaticResource Headline}"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="JPush Integration Test"
+                Style="{StaticResource SubHeadline}"
+                HorizontalOptions="Center" />
+
+            <!-- Registration ID Section -->
+            <Frame BackgroundColor="LightBlue" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="注册信息" FontAttributes="Bold" />
+                    <Label x:Name="RegistrationIdLabel" Text="Registration ID: 未获取" />
+                    <Button 
+                        x:Name="GetRegIdBtn"
+                        Text="获取Registration ID" 
+                        Clicked="OnGetRegistrationIdClicked"
+                        BackgroundColor="DodgerBlue"
+                        TextColor="White" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Alias and Tags Section -->
+            <Frame BackgroundColor="LightGreen" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="别名和标签设置" FontAttributes="Bold" />
+                    <Entry x:Name="AliasEntry" Placeholder="输入别名 (Alias)" />
+                    <Entry x:Name="TagsEntry" Placeholder="输入标签 (Tags，逗号分隔)" />
+                    <Button 
+                        x:Name="SetAliasTagsBtn"
+                        Text="设置别名和标签" 
+                        Clicked="OnSetAliasTagsClicked"
+                        BackgroundColor="Green"
+                        TextColor="White" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Test Notification Section -->
+            <Frame BackgroundColor="LightCoral" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="通知测试" FontAttributes="Bold" />
+                    <Button 
+                        x:Name="TestNotificationBtn"
+                        Text="发送测试通知" 
+                        Clicked="OnTestNotificationClicked"
+                        BackgroundColor="Red"
+                        TextColor="White" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Status Section -->
+            <Frame BackgroundColor="LightYellow" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="状态信息" FontAttributes="Bold" />
+                    <Label x:Name="StatusLabel" Text="状态: 等待操作..." />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
