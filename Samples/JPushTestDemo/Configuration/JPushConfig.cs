@@ -1,4 +1,4 @@
-namespace JPushTestDemo.Configuration;
+﻿namespace JPushTestDemo.Configuration;
 
 /// <summary>
 /// JPush配置类
@@ -8,7 +8,7 @@ public static class JPushConfig
     /// <summary>
     /// JPush应用密钥 - 需要在JPush控制台获取
     /// </summary>
-    public const string APP_KEY = "YOUR_JPUSH_APP_KEY_HERE";
+    public const string APP_KEY = "d47b7681630e2d2c3cea43b5";
 
     /// <summary>
     /// 调试模式开关
@@ -26,7 +26,7 @@ public static class JPushConfig
     /// <returns>如果配置了返回密钥，否则返回null</returns>
     public static string? GetAppKey()
     {
-        return APP_KEY == "YOUR_JPUSH_APP_KEY_HERE" ? null : APP_KEY;
+        return APP_KEY == "d1f3429f6d486b93b2133794" ? null : APP_KEY;
     }
 
     /// <summary>
