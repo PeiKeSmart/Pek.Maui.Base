@@ -25,11 +25,11 @@ public class MainActivity : MauiAppCompatActivity
         // 请求忽略电池优化
         RequestIgnoreBatteryOptimization();
         
-        // JPush 相关初始化
-        InitializeJPush();
+        // JPush 相关初始化（MainApplication已经初始化过了，这里只是验证）
+        VerifyJPushInitialization();
         
-        // 启动保活服务
-        StartKeepAliveService();
+        // 运行JPush诊断
+        JPushTestDemo.Platforms.Android.JPushDiagnostics.RunDiagnostics(this);
     }
 
     private void RequestNotificationPermission()
@@ -69,52 +69,28 @@ public class MainActivity : MauiAppCompatActivity
         }
     }
 
-    private void InitializeJPush()
+    private void VerifyJPushInitialization()
     {
         try
         {
-            System.Diagnostics.Debug.WriteLine("开始初始化JPush，上下文类型: " + this.GetType().Name);
+            System.Diagnostics.Debug.WriteLine("MainActivity - 验证JPush初始化状态");
             
-            // 设置调试模式
-            CN.Jpush.Android.Api.JPushInterface.SetDebugMode(true);
-            System.Diagnostics.Debug.WriteLine("JPush调试模式已开启");
+            // 获取Registration ID来验证初始化状态
+            string registrationId = CN.Jpush.Android.Api.JPushInterface.GetRegistrationID(this);
+            System.Diagnostics.Debug.WriteLine($"MainActivity - JPush Registration ID: {registrationId}");
             
-            // 初始化JPush
-            CN.Jpush.Android.Api.JPushInterface.Init(this);
-            System.Diagnostics.Debug.WriteLine("JPush初始化成功，APP_KEY: d47b7681630e2d2c3cea43b5");
-            
-            // 设置保活策略
-            CN.Jpush.Android.Api.JPushInterface.SetLatestNotificationNumber(this, 5);
-            System.Diagnostics.Debug.WriteLine("JPush保活策略设置完成");
-            
-            // 验证初始化
-            System.Diagnostics.Debug.WriteLine("JPush初始化验证 - 调试模式设置已完成");
-        }
-        catch (System.Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"JPush初始化失败: {ex.Message}");
-            System.Diagnostics.Debug.WriteLine($"堆栈跟踪: {ex.StackTrace}");
-        }
-    }
-
-    private void StartKeepAliveService()
-    {
-        try
-        {
-            var serviceIntent = new Intent(this, typeof(JPushTestDemo.Platforms.Android.JPushKeepAliveService));
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            if (string.IsNullOrEmpty(registrationId))
             {
-                StartForegroundService(serviceIntent);
+                System.Diagnostics.Debug.WriteLine("MainActivity - Registration ID为空，JPush可能未正确初始化");
             }
             else
             {
-                StartService(serviceIntent);
+                System.Diagnostics.Debug.WriteLine("MainActivity - JPush初始化验证成功");
             }
-            System.Diagnostics.Debug.WriteLine("JPush保活服务启动成功");
         }
         catch (System.Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"启动JPush保活服务失败: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"MainActivity - JPush初始化验证失败: {ex.Message}");
         }
     }
 

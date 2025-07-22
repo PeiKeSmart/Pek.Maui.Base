@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.peikesmart.test">
-	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true" android:name="JPushTestDemo.Platforms.Android.MainApplication" android:persistent="true">
+	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true" android:name="JPushTestDemo.Platforms.Android.MainApplication" android:persistent="true" android:killAfterRestore="false">
 		<!-- JPush APP_KEY 配置 -->
 		<meta-data android:name="JPUSH_APPKEY" android:value="d47b7681630e2d2c3cea43b5" />
 		<!-- JPush 渠道配置 -->
@@ -56,13 +56,17 @@
 			</intent-filter>
 		</service>
 
-		<!-- JPush 接收器 -->
+		<!-- JPush 核心接收器 - 必须保留 -->
 		<receiver
 			android:name="cn.jpush.android.service.PushReceiver"
 			android:enabled="true"
 			android:exported="true">
 			<intent-filter android:priority="1000">
 				<action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+				<category android:name="net.peikesmart.test" />
+			</intent-filter>
+			<intent-filter android:priority="1000">
+				<action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED_PROXY" />
 				<category android:name="net.peikesmart.test" />
 			</intent-filter>
 			<intent-filter>
@@ -128,6 +132,35 @@
 				<action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
 				<action android:name="android.intent.action.QUICKBOOT_POWERON" />
 				<action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+			</intent-filter>
+		</receiver>
+
+		<!-- JPush静态广播接收器 - 处理冷启动推送 -->
+		<receiver
+			android:name="jpushtestdemo.platforms.android.JPushStaticReceiver"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter android:priority="1000">
+				<action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+				<category android:name="net.peikesmart.test" />
+			</intent-filter>
+			<intent-filter android:priority="1000">
+				<action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED_PROXY" />
+				<category android:name="net.peikesmart.test" />
+			</intent-filter>
+			<intent-filter android:priority="1000">
+				<action android:name="cn.jpush.android.intent.SERVICE_MESSAGE" />
+				<category android:name="net.peikesmart.test" />
+			</intent-filter>
+		</receiver>
+
+		<!-- 简单测试接收器 -->
+		<receiver
+			android:name="jpushtestdemo.platforms.android.SimpleTestReceiver"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter android:priority="1000">
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
 		</receiver>
 
