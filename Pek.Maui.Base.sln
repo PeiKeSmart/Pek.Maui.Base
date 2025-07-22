@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pek.Maui.LiteDB", "Pek.Maui
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JPush", "JPush", "{3B6CC4BA-3D4F-4DFA-91E2-59EBAB26543D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pek.Maui.Android.JPush", "Pek.Maui.Android.JPush\Pek.Maui.Android.JPush.csproj", "{9BA023DE-1BC9-4BFB-9FFD-1D019FE1C8C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{6705186C-60AD-4CEF-B482-854930BE7958}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6705186C-60AD-4CEF-B482-854930BE7958}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6705186C-60AD-4CEF-B482-854930BE7958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BA023DE-1BC9-4BFB-9FFD-1D019FE1C8C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BA023DE-1BC9-4BFB-9FFD-1D019FE1C8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BA023DE-1BC9-4BFB-9FFD-1D019FE1C8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BA023DE-1BC9-4BFB-9FFD-1D019FE1C8C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +49,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6705186C-60AD-4CEF-B482-854930BE7958} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{3B6CC4BA-3D4F-4DFA-91E2-59EBAB26543D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{9BA023DE-1BC9-4BFB-9FFD-1D019FE1C8C6} = {3B6CC4BA-3D4F-4DFA-91E2-59EBAB26543D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {323831A1-A95B-40AB-B9AD-36A0BC10C2CB}
