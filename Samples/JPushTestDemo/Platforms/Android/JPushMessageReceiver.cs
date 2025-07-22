@@ -1,3 +1,4 @@
+using Android.App;
 using Android.Content;
 using Android.Util;
 using CN.Jpush.Android.Api;
@@ -11,6 +12,11 @@ namespace JPushTestDemo.Platforms.Android
     /// 完全按照官方Demo配置 - 类名和位置都模仿官方
     /// 继承cn.jpush.android.service.JPushMessageReceiver来处理JPush的各种推送事件
     /// </summary>
+    [BroadcastReceiver(
+        Enabled = true, 
+        Exported = true,
+        Name = "jpushtestdemo.platforms.android.JPushMessageReceiver")]
+    [IntentFilter(new[] { "cn.jpush.android.intent.SERVICE_MESSAGE" }, Categories = new[] { "net.peikesmart.test" })]
     public class JPushMessageReceiver : CN.Jpush.Android.Service.JPushMessageReceiver
     {
         private const string TAG = "JPushMessageReceiver";
