@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.peikesmart.test">
-	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true" android:name="JPushTestDemo.Platforms.Android.MainApplication">
+	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true" android:name="JPushTestDemo.Platforms.Android.MainApplication" android:persistent="true">
 		<!-- JPush APP_KEY 配置 -->
 		<meta-data android:name="JPUSH_APPKEY" android:value="d47b7681630e2d2c3cea43b5" />
 		<!-- JPush 渠道配置 -->
@@ -12,7 +12,8 @@
 		<service
 			android:name="cn.jpush.android.service.PushService"
 			android:enabled="true"
-			android:exported="false">
+			android:exported="false"
+			android:process=":pushcore">
 			<intent-filter>
 				<action android:name="cn.jpush.android.intent.REGISTER" />
 				<action android:name="cn.jpush.android.intent.REPORT" />
@@ -28,6 +29,14 @@
 			android:exported="false">
 		</service>
 
+		<!-- JPush 保活前台服务 -->
+		<service
+			android:name="jpushtestdemo.platforms.android.JPushKeepAliveService"
+			android:enabled="true"
+			android:exported="false"
+			android:foregroundServiceType="dataSync">
+		</service>
+
 		<!-- JPush 下载服务 -->
 		<service
 			android:name="cn.jpush.android.service.DownloadService"
@@ -39,7 +48,8 @@
 		<service
 			android:name="cn.jpush.android.service.DaemonService"
 			android:enabled="true"
-			android:exported="true">
+			android:exported="true"
+			android:process=":pushcore">
 			<intent-filter>
 				<action android:name="cn.jpush.android.intent.DaemonService" />
 				<category android:name="net.peikesmart.test" />
@@ -64,6 +74,24 @@
 				<action android:name="android.intent.action.PACKAGE_REMOVED" />
 				<data android:scheme="package" />
 			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+				<action android:name="android.intent.action.PACKAGE_REPLACED" />
+				<data android:scheme="package" />
+			</intent-filter>
+		</receiver>
+
+		<!-- 系统启动接收器 -->
+		<receiver
+			android:name="cn.jpush.android.service.BootReceiver"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter android:priority="1000">
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<action android:name="android.intent.action.QUICKBOOT_POWERON" />
+				<action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+			</intent-filter>
 		</receiver>
 
 		<!-- JPush 唤醒接收器 -->
@@ -79,6 +107,27 @@
 			<intent-filter>
 				<action android:name="cn.jpush.android.intent.SERVICE_MESSAGE" />
 				<category android:name="net.peikesmart.test" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+				<category android:name="net.peikesmart.test" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED_PROXY" />
+				<category android:name="net.peikesmart.test" />
+			</intent-filter>
+		</receiver>
+
+		<!-- 自定义启动接收器 -->
+		<receiver
+			android:name="jpushtestdemo.platforms.android.JPushBootReceiver"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter android:priority="1000">
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+				<action android:name="android.intent.action.QUICKBOOT_POWERON" />
+				<action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
 			</intent-filter>
 		</receiver>
 
@@ -149,4 +198,17 @@
 	
 	<!-- Android 13+ 通知权限 -->
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+	
+	<!-- 开机启动权限 -->
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	
+	<!-- 前台服务权限 -->
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+	
+	<!-- 忽略电池优化权限 -->
+	<uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+	
+	<!-- 自启动权限 -->
+	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 </manifest>
