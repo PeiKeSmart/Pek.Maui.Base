@@ -15,7 +15,7 @@ namespace JPushTestDemo.Platforms.Android
     [BroadcastReceiver(
         Enabled = true, 
         Exported = true,
-        Name = "jpushtestdemo.platforms.android.JPushMessageReceiver")]
+        Name = "JPushTestDemo.Platforms.Android.JPushMessageReceiver")]
     [IntentFilter(new[] { "cn.jpush.android.intent.SERVICE_MESSAGE" }, Categories = new[] { "net.peikesmart.test" })]
     public class JPushMessageReceiver : CN.Jpush.Android.Service.JPushMessageReceiver
     {
@@ -28,12 +28,24 @@ namespace JPushTestDemo.Platforms.Android
         {
             try
             {
-                Log.Info(TAG, $"[OnNotifyMessageArrived] 收到通知");
+                Log.Info(TAG, $"[OnNotifyMessageArrived] 🔔 收到通知！！！");
+                System.Diagnostics.Debug.WriteLine($"[{TAG}] 🔔 收到通知！！！");
+                
                 if (message != null)
                 {
                     Log.Info(TAG, $"[OnNotifyMessageArrived] 标题: {message.NotificationTitle}");
                     Log.Info(TAG, $"[OnNotifyMessageArrived] 内容: {message.NotificationContent}");
                     Log.Info(TAG, $"[OnNotifyMessageArrived] 附加数据: {message.NotificationExtras}");
+                    Log.Info(TAG, $"[OnNotifyMessageArrived] 消息ID: {message.NotificationId}");
+                    
+                    System.Diagnostics.Debug.WriteLine($"[{TAG}] 标题: {message.NotificationTitle}");
+                    System.Diagnostics.Debug.WriteLine($"[{TAG}] 内容: {message.NotificationContent}");
+                    System.Diagnostics.Debug.WriteLine($"[{TAG}] 附加数据: {message.NotificationExtras}");
+                }
+                else
+                {
+                    Log.Warn(TAG, "[OnNotifyMessageArrived] 消息对象为null");
+                    System.Diagnostics.Debug.WriteLine($"[{TAG}] 消息对象为null");
                 }
                 
                 // 调用父类方法以保持兼容性
@@ -42,6 +54,7 @@ namespace JPushTestDemo.Platforms.Android
             catch (System.Exception ex)
             {
                 Log.Error(TAG, $"[OnNotifyMessageArrived] 处理通知接收事件时发生错误: {ex.Message}", ex);
+                System.Diagnostics.Debug.WriteLine($"[{TAG}] 错误: {ex.Message}");
             }
         }
 
@@ -76,12 +89,23 @@ namespace JPushTestDemo.Platforms.Android
         {
             try
             {
-                Log.Info(TAG, $"[OnMessage] 收到自定义消息");
+                Log.Info(TAG, $"[OnMessage] 📨 收到自定义消息！！！");
+                System.Diagnostics.Debug.WriteLine($"[{TAG}] 📨 收到自定义消息！！！");
+                
                 if (customMessage != null)
                 {
                     Log.Info(TAG, $"[OnMessage] 标题: {customMessage.Title}");
                     Log.Info(TAG, $"[OnMessage] 内容: {customMessage.Message}");
                     Log.Info(TAG, $"[OnMessage] 附加数据: {customMessage.Extra}");
+                    
+                    System.Diagnostics.Debug.WriteLine($"[{TAG}] 标题: {customMessage.Title}");
+                    System.Diagnostics.Debug.WriteLine($"[{TAG}] 内容: {customMessage.Message}");
+                    System.Diagnostics.Debug.WriteLine($"[{TAG}] 附加数据: {customMessage.Extra}");
+                }
+                else
+                {
+                    Log.Warn(TAG, "[OnMessage] 自定义消息对象为null");
+                    System.Diagnostics.Debug.WriteLine($"[{TAG}] 自定义消息对象为null");
                 }
                 
                 // 调用父类方法以保持兼容性
@@ -90,6 +114,7 @@ namespace JPushTestDemo.Platforms.Android
             catch (System.Exception ex)
             {
                 Log.Error(TAG, $"[OnMessage] 处理自定义消息时发生错误: {ex.Message}", ex);
+                System.Diagnostics.Debug.WriteLine($"[{TAG}] 错误: {ex.Message}");
             }
         }
 
