@@ -388,5 +388,80 @@ public class JPushServiceAndroid : IJPushService
             return true; // 发生错误时返回true，表示服务可能已停止
         }
     }
+    
+    /// <summary>
+    /// 检查推送接收状态和配置
+    /// </summary>
+    public string CheckPushReceiveStatus()
+    {
+        try
+        {
+            var context = Platform.CurrentActivity ?? global::Android.App.Application.Context;
+            if (context == null)
+            {
+                return "❌ 无法获取Android上下文";
+            }
+            
+            var result = new System.Text.StringBuilder();
+            result.AppendLine("📊 推送接收状态检查:");
+            
+            // 1. 检查Registration ID
+            string regId = CN.Jpush.Android.Api.JPushInterface.GetRegistrationID(context);
+            if (string.IsNullOrEmpty(regId))
+            {
+                result.AppendLine("❌ Registration ID: 为空 - JPush未正确注册");
+            }
+            else
+            {
+                result.AppendLine($"✅ Registration ID: {regId.Substring(0, Math.Min(10, regId.Length))}...");
+            }
+            
+            // 2. 检查连接状态
+            bool isConnected = CN.Jpush.Android.Api.JPushInterface.GetConnectionState(context);
+            result.AppendLine($"{(isConnected ? "✅" : "❌")} JPush连接状态: {isConnected}");
+            
+            // 3. 检查应用包名
+            string packageName = context.PackageName;
+            result.AppendLine($"📱 应用包名: {packageName}");
+            
+            // 4. 检查APP_KEY配置
+            result.AppendLine($"🔑 APP_KEY: {Configuration.JPushConfig.APP_KEY}");
+            
+            // 5. 检查推送是否被停止
+            bool isPushStopped = IsPushStopped();
+            result.AppendLine($"{(isPushStopped ? "❌" : "✅")} 推送服务状态: {(isPushStopped ? "已停止" : "运行中")}");
+            
+            // 6. 检查通知权限（Android 13+）
+            if (global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.Tiramisu)
+            {
+                try
+                {
+                    var notificationManager = (global::Android.App.NotificationManager)context.GetSystemService(Context.NotificationService);
+                    bool hasPermission = notificationManager?.AreNotificationsEnabled() == true;
+                    result.AppendLine($"{(hasPermission ? "✅" : "❌")} 通知权限: {(hasPermission ? "已授权" : "未授权")}");
+                }
+                catch (Exception ex)
+                {
+                    result.AppendLine($"⚠️ 通知权限检查失败: {ex.Message}");
+                }
+            }
+            else
+            {
+                result.AppendLine("ℹ️ 通知权限: Android 13以下版本，默认已授权");
+            }
+            
+            // 7. 检查网络状态
+            var connectivityManager = (global::Android.Net.ConnectivityManager)context.GetSystemService(Context.ConnectivityService);
+            var activeNetwork = connectivityManager?.ActiveNetworkInfo;
+            bool hasNetwork = activeNetwork?.IsConnected == true;
+            result.AppendLine($"{(hasNetwork ? "✅" : "❌")} 网络连接: {(hasNetwork ? "已连接" : "未连接")}");
+            
+            return result.ToString();
+        }
+        catch (Exception ex)
+        {
+            return $"❌ 检查失败: {ex.Message}";
+        }
+    }
 }
 #endif

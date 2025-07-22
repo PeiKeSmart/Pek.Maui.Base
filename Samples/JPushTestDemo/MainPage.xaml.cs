@@ -86,6 +86,22 @@ public partial class MainPage : ContentPage
 		}
 	}
 
+	private void OnCheckPushStatusClicked(object? sender, EventArgs e)
+	{
+		try
+		{
+			var statusReport = _jPushService.CheckPushReceiveStatus();
+			UpdateStatus("推送状态检查完成，查看详细信息");
+			
+			// Show detailed status in alert
+			DisplayAlert("📊 推送接收状态报告", statusReport, "确定");
+		}
+		catch (Exception ex)
+		{
+			UpdateStatus($"检查推送状态失败: {ex.Message}");
+		}
+	}
+
 	private void UpdateStatus(string message)
 	{
 		StatusLabel.Text = $"状态: {message}";

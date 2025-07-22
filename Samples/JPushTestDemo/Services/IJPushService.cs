@@ -71,4 +71,10 @@ public interface IJPushService
     /// </summary>
     /// <returns>true表示已停止，false表示正在运行</returns>
     bool IsPushStopped();
+
+    /// <summary>
+    /// 检查推送接收状态和配置
+    /// </summary>
+    /// <returns>推送状态检查结果</returns>
+    string CheckPushReceiveStatus();
 }

@@ -66,6 +66,19 @@
                 </VerticalStackLayout>
             </Frame>
 
+            <!-- Push Status Check Section -->
+            <Frame BackgroundColor="LightBlue" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="推送状态检查" FontAttributes="Bold" />
+                    <Button 
+                        x:Name="CheckPushStatusBtn"
+                        Text="🔍 检查推送接收状态" 
+                        Clicked="OnCheckPushStatusClicked"
+                        BackgroundColor="Blue"
+                        TextColor="White" />
+                </VerticalStackLayout>
+            </Frame>
+
             <!-- Status Section -->
             <Frame BackgroundColor="LightYellow" Padding="15">
                 <VerticalStackLayout Spacing="10">

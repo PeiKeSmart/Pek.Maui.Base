@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.peikesmart.test">
-	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true">
+	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true" android:name="JPushTestDemo.Platforms.Android.MainApplication">
 		<!-- JPush APP_KEY 配置 -->
 		<meta-data android:name="JPUSH_APPKEY" android:value="d47b7681630e2d2c3cea43b5" />
 		<!-- JPush 渠道配置 -->
 		<meta-data android:name="JPUSH_CHANNEL" android:value="default_channel" />
+		<!-- JPush 包名配置 -->
+		<meta-data android:name="JPUSH_PKGNAME" android:value="net.peikesmart.test" />
 		
 		<!-- JPush 核心服务 -->
 		<service
@@ -69,6 +71,17 @@
 			android:name="cn.jpush.android.service.AlarmReceiver"
 			android:exported="false" />
 
+		<!-- 自定义推送消息接收器 - 完全按照JPush官方Demo配置 -->
+		<receiver
+			android:name=".JPushMessageReceiver"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter>
+				<action android:name="cn.jpush.android.intent.SERVICE_MESSAGE" />
+				<category android:name="${applicationId}" />
+			</intent-filter>
+		</receiver>
+
 		<!-- JPush 必需的Activity -->
 		<activity
 			android:name="cn.jpush.android.ui.PushActivity"
@@ -100,9 +113,10 @@
 			android:name="cn.jpush.android.service.JNotifyActivity"
 			android:exported="true"
 			android:taskAffinity="jpush.custom"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar">
+			android:theme="@style/JPushTheme">
 			<intent-filter>
 				<action android:name="cn.jpush.android.intent.JNotifyActivity" />
+				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="net.peikesmart.test" />
 			</intent-filter>
 		</activity>

@@ -62,4 +62,9 @@ public class DefaultJPushService : IJPushService
         System.Diagnostics.Debug.WriteLine("DefaultJPushService.IsPushStopped (不支持当前平台)");
         return true;
     }
+
+    public string CheckPushReceiveStatus()
+    {
+        return "❌ 当前平台不支持JPush推送服务";
+    }
 }
