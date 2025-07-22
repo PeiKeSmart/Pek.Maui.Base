@@ -71,9 +71,9 @@
 			android:name="cn.jpush.android.service.AlarmReceiver"
 			android:exported="false" />
 
-		<!-- 自定义推送消息接收器 - 使用正确的类名 -->
+		<!-- 自定义推送消息接收器 - 使用指定的类名 -->
 		<receiver
-			android:name="JPushTestDemo.Platforms.Android.JPushMessageReceiver"
+			android:name="jpushtestdemo.platforms.android.JPushMessageReceiver"
 			android:enabled="true"
 			android:exported="true">
 			<intent-filter>
