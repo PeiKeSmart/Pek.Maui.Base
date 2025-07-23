@@ -11,7 +11,11 @@ namespace JPushTestDemo.Platforms.Android
     /// 测试最基本的静态广播功能
     /// </summary>
     [BroadcastReceiver(Enabled = true, Exported = true)]
-    [IntentFilter(new[] { Intent.ActionBootCompleted })]
+    [IntentFilter(new[] { 
+        Intent.ActionBootCompleted,
+        "com.test.static.broadcast",
+        "android.intent.action.TEST_BROADCAST"
+    })]
     public class SimpleTestReceiver : BroadcastReceiver
     {
         private const string TAG = "SimpleTestReceiver";
@@ -23,18 +27,29 @@ namespace JPushTestDemo.Platforms.Android
 
             try
             {
-                Log.Info(TAG, "简单测试接收器被触发");
+                string action = intent.Action ?? "";
                 
-                // 创建简单通知
-                CreateSimpleNotification(context);
+                // 记录到持久化日志 - 这是关键！
+                PersistentLogger.LogEvent(context, "静态广播接收", $"Action: {action}");
+                
+                string testData = intent.GetStringExtra("test_data") ?? "";
+                if (!string.IsNullOrEmpty(testData))
+                {
+                    PersistentLogger.LogDiagnostic(context, TAG, $"测试数据: {testData}");
+                }
+                
+                // 创建通知
+                CreateSimpleNotification(context, action, testData);
+                
+                PersistentLogger.LogDiagnostic(context, TAG, "静态广播处理完成");
             }
             catch (System.Exception ex)
             {
-                Log.Error(TAG, $"简单测试接收器失败: {ex.Message}", ex);
+                PersistentLogger.LogError(context, TAG, "静态广播处理失败", ex);
             }
         }
 
-        private void CreateSimpleNotification(Context context)
+        private void CreateSimpleNotification(Context context, string action, string testData)
         {
             try
             {
@@ -45,17 +60,20 @@ namespace JPushTestDemo.Platforms.Android
                 {
                     var channel = new NotificationChannel(
                         channelId,
-                        "简单测试",
+                        "静态广播测试",
                         NotificationImportance.High);
 
                     var notificationManager = context.GetSystemService(Context.NotificationService) as NotificationManager;
                     notificationManager?.CreateNotificationChannel(channel);
                 }
 
+                string title = "静态广播正常工作";
+                string content = string.IsNullOrEmpty(testData) ? $"收到: {action}" : testData;
+
                 // 创建通知
                 var notification = new NotificationCompat.Builder(context, channelId)
-                    .SetContentTitle("静态广播工作正常")
-                    .SetContentText("系统重启后收到此通知")
+                    .SetContentTitle(title)
+                    .SetContentText(content)
                     .SetSmallIcon(17301632)
                     .SetAutoCancel(true)
                     .Build();
@@ -63,11 +81,11 @@ namespace JPushTestDemo.Platforms.Android
                 var notificationManager2 = context.GetSystemService(Context.NotificationService) as NotificationManager;
                 notificationManager2?.Notify(4001, notification);
 
-                Log.Info(TAG, "简单测试通知创建成功");
+                Log.Info(TAG, $"✅ 静态广播通知创建成功: {action}");
             }
             catch (System.Exception ex)
             {
-                Log.Error(TAG, $"创建简单测试通知失败: {ex.Message}", ex);
+                Log.Error(TAG, $"创建静态广播通知失败: {ex.Message}", ex);
             }
         }
     }

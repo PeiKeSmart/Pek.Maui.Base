@@ -32,10 +32,12 @@ namespace JPushTestDemo.Platforms.Android
             try
             {
                 string action = intent.Action ?? "";
-                Log.Info(TAG, $"[静态接收器] 收到广播: {action}");
+                
+                // 记录到持久化日志 - 关键诊断信息！
+                PersistentLogger.LogEvent(context, "JPush静态广播", $"Action: {action}");
 
                 // 记录所有接收到的Intent数据
-                LogIntentData(intent);
+                LogIntentData(context, intent);
 
                 switch (action)
                 {
@@ -49,31 +51,33 @@ namespace JPushTestDemo.Platforms.Android
                         HandleCustomMessage(context, intent);
                         break;
                 }
+                
+                PersistentLogger.LogDiagnostic(context, TAG, "JPush广播处理完成");
             }
             catch (System.Exception ex)
             {
-                Log.Error(TAG, $"[静态接收器] 处理推送消息时发生错误: {ex.Message}", ex);
+                PersistentLogger.LogError(context, TAG, "JPush广播处理失败", ex);
             }
         }
 
-        private void LogIntentData(Intent intent)
+        private void LogIntentData(Context context, Intent intent)
         {
             try
             {
                 var extras = intent.Extras;
                 if (extras != null)
                 {
-                    Log.Info(TAG, "[静态接收器] Intent数据:");
+                    PersistentLogger.LogDiagnostic(context, TAG, "Intent数据:");
                     foreach (string key in extras.KeySet())
                     {
                         var value = extras.Get(key);
-                        Log.Info(TAG, $"  {key} = {value}");
+                        PersistentLogger.LogDiagnostic(context, TAG, $"  {key} = {value}");
                     }
                 }
             }
             catch (System.Exception ex)
             {
-                Log.Error(TAG, $"记录Intent数据失败: {ex.Message}", ex);
+                PersistentLogger.LogError(context, TAG, "记录Intent数据失败", ex);
             }
         }
 

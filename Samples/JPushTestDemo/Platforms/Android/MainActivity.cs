@@ -30,6 +30,15 @@ public class MainActivity : MauiAppCompatActivity
         
         // 运行JPush诊断
         JPushTestDemo.Platforms.Android.JPushDiagnostics.RunDiagnostics(this);
+        
+        // 运行广播诊断
+        JPushTestDemo.Platforms.Android.BroadcastDiagnostics.RunFullDiagnostics(this);
+        
+        // 记录应用启动事件
+        JPushTestDemo.Platforms.Android.PersistentLogger.LogEvent(this, "应用启动", "MainActivity.OnCreate");
+        
+        // 显示历史日志信息
+        ShowLogInfo();
     }
 
     private void RequestNotificationPermission()
@@ -118,6 +127,26 @@ public class MainActivity : MauiAppCompatActivity
         if (requestCode == BATTERY_OPTIMIZATION_REQUEST_CODE)
         {
             System.Diagnostics.Debug.WriteLine($"电池优化设置结果: {resultCode}");
+        }
+    }
+
+    private void ShowLogInfo()
+    {
+        try
+        {
+            // 获取日志文件信息
+            string logInfo = JPushTestDemo.Platforms.Android.PersistentLogger.GetLogFileInfo(this);
+            System.Diagnostics.Debug.WriteLine($"日志文件信息: {logInfo}");
+            
+            // 显示最近的日志（用于调试）
+            string recentLogs = JPushTestDemo.Platforms.Android.PersistentLogger.ReadRecentLogs(this, 20);
+            System.Diagnostics.Debug.WriteLine("=== 最近的诊断日志 ===");
+            System.Diagnostics.Debug.WriteLine(recentLogs);
+            System.Diagnostics.Debug.WriteLine("=== 日志结束 ===");
+        }
+        catch (System.Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"显示日志信息失败: {ex.Message}");
         }
     }
 }
