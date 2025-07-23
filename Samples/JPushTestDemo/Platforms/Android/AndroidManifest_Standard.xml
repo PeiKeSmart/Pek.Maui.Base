@@ -1,19 +1,38 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.peikesmart.test">
-	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true" android:name="JPushTestDemo.Platforms.Android.MainApplication" android:persistent="true" android:killAfterRestore="false">
-		<!-- JPush APP_KEY 配置 -->
-		<meta-data android:name="JPUSH_APPKEY" android:value="d47b7681630e2d2c3cea43b5" />
-		<!-- JPush 渠道配置 -->
-		<meta-data android:name="JPUSH_CHANNEL" android:value="default_channel" />
-		<!-- JPush 包名配置 -->
-		<meta-data android:name="JPUSH_PKGNAME" android:value="net.peikesmart.test" />
+	
+	<!-- 权限配置 -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+	<uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+	
+	<!-- JPush 自定义权限 -->
+	<permission
+		android:name="net.peikesmart.test.permission.JPUSH_MESSAGE"
+		android:protectionLevel="signature" />
+	<uses-permission android:name="net.peikesmart.test.permission.JPUSH_MESSAGE" />
+
+	<application 
+		android:allowBackup="true" 
+		android:icon="@mipmap/appicon" 
+		android:supportsRtl="true" 
+		android:name="JPushTestDemo.Platforms.Android.MainApplication">
 		
+		<!-- JPush 基础配置 -->
+		<meta-data android:name="JPUSH_APPKEY" android:value="d47b7681630e2d2c3cea43b5" />
+		<meta-data android:name="JPUSH_CHANNEL" android:value="default_channel" />
+		<meta-data android:name="JPUSH_PKGNAME" android:value="net.peikesmart.test" />
+
 		<!-- JPush 核心服务 -->
 		<service
 			android:name="cn.jpush.android.service.PushService"
 			android:enabled="true"
-			android:exported="false"
-			android:process=":pushcore">
+			android:exported="false">
 			<intent-filter>
 				<action android:name="cn.jpush.android.intent.REGISTER" />
 				<action android:name="cn.jpush.android.intent.REPORT" />
@@ -22,35 +41,27 @@
 			</intent-filter>
 		</service>
 
-		<!-- JPush JCommonService - 必需服务 -->
-		<service
-			android:name="cn.jpush.android.service.JCommonService"
-			android:enabled="true"
-			android:exported="false">
-		</service>
-
-
-
-		<!-- JPush 下载服务 -->
 		<service
 			android:name="cn.jpush.android.service.DownloadService"
 			android:enabled="true"
-			android:exported="false">
-		</service>
+			android:exported="false" />
 
-		<!-- JPush DaemonService -->
+		<service
+			android:name="cn.jpush.android.service.JCommonService"
+			android:enabled="true"
+			android:exported="false" />
+
 		<service
 			android:name="cn.jpush.android.service.DaemonService"
 			android:enabled="true"
-			android:exported="true"
-			android:process=":pushcore">
+			android:exported="true">
 			<intent-filter>
 				<action android:name="cn.jpush.android.intent.DaemonService" />
 				<category android:name="net.peikesmart.test" />
 			</intent-filter>
 		</service>
 
-		<!-- JPush 核心接收器 - 必须保留 -->
+		<!-- JPush 核心接收器 -->
 		<receiver
 			android:name="cn.jpush.android.service.PushReceiver"
 			android:enabled="true"
@@ -72,32 +83,13 @@
 				<action android:name="android.intent.action.PACKAGE_REMOVED" />
 				<data android:scheme="package" />
 			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-				<action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-				<action android:name="android.intent.action.PACKAGE_REPLACED" />
-				<data android:scheme="package" />
-			</intent-filter>
 		</receiver>
 
-		<!-- 系统启动接收器 -->
 		<receiver
-			android:name="cn.jpush.android.service.BootReceiver"
-			android:enabled="true"
-			android:exported="true">
-			<intent-filter android:priority="1000">
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-				<action android:name="android.intent.action.QUICKBOOT_POWERON" />
-				<action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
-			</intent-filter>
-		</receiver>
-
-		<!-- JPush 唤醒接收器 -->
-		<receiver 
 			android:name="cn.jpush.android.service.AlarmReceiver"
 			android:exported="false" />
 
-		<!-- 自定义推送消息接收器 - 只处理自定义消息 -->
+		<!-- 自定义消息接收器 - 继承JPushMessageReceiver -->
 		<receiver
 			android:name="jpushtestdemo.platforms.android.JPushMessageReceiver"
 			android:enabled="true"
@@ -108,7 +100,7 @@
 			</intent-filter>
 		</receiver>
 
-		<!-- 简单测试接收器 -->
+		<!-- 测试接收器 - 用于诊断 -->
 		<receiver
 			android:name="jpushtestdemo.platforms.android.SimpleTestReceiver"
 			android:enabled="true"
@@ -131,7 +123,6 @@
 			</intent-filter>
 		</activity>
 
-		<!-- JPush 弹窗Activity -->
 		<activity
 			android:name="cn.jpush.android.ui.PopWinActivity"
 			android:configChanges="orientation|keyboardHidden"
@@ -144,7 +135,6 @@
 			</intent-filter>
 		</activity>
 
-		<!-- JPush 通知Activity -->
 		<activity
 			android:name="cn.jpush.android.service.JNotifyActivity"
 			android:exported="true"
@@ -158,44 +148,4 @@
 		</activity>
 		
 	</application>
-	
-	<!-- Basic permissions -->
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	
-	<!-- JPush 自定义权限 -->
-	<permission
-		android:name="net.peikesmart.test.permission.JPUSH_MESSAGE"
-		android:protectionLevel="signature" />
-	<uses-permission android:name="net.peikesmart.test.permission.JPUSH_MESSAGE" />
-	
-	<!-- JPush permissions -->
-	<uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-	
-	<!-- Android 13+ 通知权限 -->
-	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-	
-	<!-- 开机启动权限 -->
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	
-	<!-- 前台服务权限 -->
-	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-	<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-	
-	<!-- 忽略电池优化权限 -->
-	<uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-	
-	<!-- 自启动权限 -->
-	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 </manifest>

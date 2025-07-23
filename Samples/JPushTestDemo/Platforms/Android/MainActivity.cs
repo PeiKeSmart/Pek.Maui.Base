@@ -28,14 +28,14 @@ public class MainActivity : MauiAppCompatActivity
         // JPush 相关初始化（MainApplication已经初始化过了，这里只是验证）
         VerifyJPushInitialization();
         
-        // 运行JPush诊断
-        JPushTestDemo.Platforms.Android.JPushDiagnostics.RunDiagnostics(this);
-        
-        // 运行广播诊断
-        JPushTestDemo.Platforms.Android.BroadcastDiagnostics.RunFullDiagnostics(this);
-        
         // 记录应用启动事件
         JPushTestDemo.Platforms.Android.PersistentLogger.LogEvent(this, "应用启动", "MainActivity.OnCreate");
+        
+        // 执行分层测试
+        JPushTestDemo.Platforms.Android.LayeredTestPlan.ExecuteFullTest(this);
+        
+        // 分析测试结果
+        JPushTestDemo.Platforms.Android.LayeredTestPlan.AnalyzeTestResults(this);
         
         // 显示历史日志信息
         ShowLogInfo();
