@@ -1,5 +1,6 @@
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.Util;
 
 namespace JPushTestDemo.Platforms.Android
@@ -138,7 +139,7 @@ namespace JPushTestDemo.Platforms.Android
         {
             try
             {
-                var componentName = new ComponentName(context, receiverType);
+                var componentName = new ComponentName(context, Java.Lang.Class.FromType(receiverType));
                 var packageManager = context.PackageManager;
                 
                 var state = packageManager?.GetComponentEnabledSetting(componentName);

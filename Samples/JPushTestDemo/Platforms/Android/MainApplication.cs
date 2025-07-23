@@ -2,7 +2,7 @@
 using Android.Runtime;
 using JPushTestDemo.Configuration;
 
-namespace JPushTestDemo;
+namespace JPushTestDemo.Platforms.Android;
 
 [Application]
 public class MainApplication : MauiApplication

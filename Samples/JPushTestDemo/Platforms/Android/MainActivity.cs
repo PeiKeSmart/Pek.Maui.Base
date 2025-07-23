@@ -6,8 +6,9 @@ using Android.OS;
 using Android.Provider;
 using AndroidX.Core.App;
 using AndroidX.Core.Content;
+using AndroidManifest = Android.Manifest;
 
-namespace JPushTestDemo;
+namespace JPushTestDemo.Platforms.Android;
 
 [Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true, LaunchMode = LaunchMode.SingleTop, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
 public class MainActivity : MauiAppCompatActivity
@@ -29,13 +30,13 @@ public class MainActivity : MauiAppCompatActivity
         VerifyJPushInitialization();
         
         // 记录应用启动事件
-        JPushTestDemo.Platforms.Android.PersistentLogger.LogEvent(this, "应用启动", "MainActivity.OnCreate");
+        PersistentLogger.LogEvent(this, "应用启动", "MainActivity.OnCreate");
         
         // 执行分层测试
-        JPushTestDemo.Platforms.Android.LayeredTestPlan.ExecuteFullTest(this);
+        LayeredTestPlan.ExecuteFullTest(this);
         
         // 分析测试结果
-        JPushTestDemo.Platforms.Android.LayeredTestPlan.AnalyzeTestResults(this);
+        LayeredTestPlan.AnalyzeTestResults(this);
         
         // 显示历史日志信息
         ShowLogInfo();
@@ -45,9 +46,9 @@ public class MainActivity : MauiAppCompatActivity
     {
         if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu) // Android 13+
         {
-            if (ContextCompat.CheckSelfPermission(this, Android.Manifest.Permission.PostNotifications) != Permission.Granted)
+            if (ContextCompat.CheckSelfPermission(this, AndroidManifest.Permission.PostNotifications) != Permission.Granted)
             {
-                ActivityCompat.RequestPermissions(this, new[] { Android.Manifest.Permission.PostNotifications }, NOTIFICATION_PERMISSION_REQUEST_CODE);
+                ActivityCompat.RequestPermissions(this, new[] { AndroidManifest.Permission.PostNotifications }, NOTIFICATION_PERMISSION_REQUEST_CODE);
             }
         }
     }
@@ -62,7 +63,7 @@ public class MainActivity : MauiAppCompatActivity
                 if (powerManager != null && !powerManager.IsIgnoringBatteryOptimizations(PackageName))
                 {
                     var intent = new Intent(Settings.ActionRequestIgnoreBatteryOptimizations);
-                    intent.SetData(Android.Net.Uri.Parse($"package:{PackageName}"));
+                    intent.SetData(global::Android.Net.Uri.Parse($"package:{PackageName}"));
                     StartActivityForResult(intent, BATTERY_OPTIMIZATION_REQUEST_CODE);
                     System.Diagnostics.Debug.WriteLine("请求忽略电池优化");
                 }
@@ -135,11 +136,11 @@ public class MainActivity : MauiAppCompatActivity
         try
         {
             // 获取日志文件信息
-            string logInfo = JPushTestDemo.Platforms.Android.PersistentLogger.GetLogFileInfo(this);
+            string logInfo = PersistentLogger.GetLogFileInfo(this);
             System.Diagnostics.Debug.WriteLine($"日志文件信息: {logInfo}");
             
             // 显示最近的日志（用于调试）
-            string recentLogs = JPushTestDemo.Platforms.Android.PersistentLogger.ReadRecentLogs(this, 20);
+            string recentLogs = PersistentLogger.ReadRecentLogs(this, 20);
             System.Diagnostics.Debug.WriteLine("=== 最近的诊断日志 ===");
             System.Diagnostics.Debug.WriteLine(recentLogs);
             System.Diagnostics.Debug.WriteLine("=== 日志结束 ===");

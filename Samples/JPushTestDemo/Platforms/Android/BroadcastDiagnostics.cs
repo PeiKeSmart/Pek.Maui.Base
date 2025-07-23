@@ -101,7 +101,7 @@ namespace JPushTestDemo.Platforms.Android
                 
                 if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
                 {
-                    var usageStatsManager = context.GetSystemService(Context.UsageStatsService) as Android.App.Usage.UsageStatsManager;
+                    var usageStatsManager = context.GetSystemService(Context.UsageStatsService) as global::Android.App.Usage.UsageStatsManager;
                     if (usageStatsManager != null)
                     {
                         bool isAppInactive = usageStatsManager.IsAppInactive(context.PackageName);
