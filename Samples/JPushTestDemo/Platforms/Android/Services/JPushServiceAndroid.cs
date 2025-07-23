@@ -463,5 +463,78 @@ public class JPushServiceAndroid : IJPushService
             return $"❌ 检查失败: {ex.Message}";
         }
     }
+
+    /// <summary>
+    /// 获取广播历史记录
+    /// </summary>
+    public string GetBroadcastHistory(int maxLines = 500)
+    {
+        try
+        {
+            var context = Platform.CurrentActivity ?? global::Android.App.Application.Context;
+            if (context == null)
+            {
+                return "❌ 无法获取Android上下文";
+            }
+
+            // 使用PersistentLogger读取历史记录
+            string history = PersistentLogger.ReadRecentLogs(context, maxLines);
+            
+            if (string.IsNullOrEmpty(history) || history == "暂无日志记录")
+            {
+                return "📝 暂无广播历史记录\n\n提示：当应用接收到JPush推送或广播时，会自动记录到此处。";
+            }
+
+            return $"📋 广播历史记录 (最近{maxLines}条):\n\n{history}";
+        }
+        catch (Exception ex)
+        {
+            return $"❌ 获取历史记录失败: {ex.Message}";
+        }
+    }
+
+    /// <summary>
+    /// 清空广播历史记录
+    /// </summary>
+    public void ClearBroadcastHistory()
+    {
+        try
+        {
+            var context = Platform.CurrentActivity ?? global::Android.App.Application.Context;
+            if (context == null)
+            {
+                System.Diagnostics.Debug.WriteLine("无法获取Android上下文，无法清空历史记录");
+                return;
+            }
+
+            PersistentLogger.ClearLogs(context);
+            System.Diagnostics.Debug.WriteLine("广播历史记录已清空");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"清空历史记录失败: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 获取历史记录文件信息
+    /// </summary>
+    public string GetHistoryFileInfo()
+    {
+        try
+        {
+            var context = Platform.CurrentActivity ?? global::Android.App.Application.Context;
+            if (context == null)
+            {
+                return "❌ 无法获取Android上下文";
+            }
+
+            return PersistentLogger.GetLogFileInfo(context);
+        }
+        catch (Exception ex)
+        {
+            return $"❌ 获取文件信息失败: {ex.Message}";
+        }
+    }
 }
 #endif

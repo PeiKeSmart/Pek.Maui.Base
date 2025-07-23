@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="JPushTestDemo.HistoryPage"
+             Title="广播历史记录">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="10">
+        
+        <!-- 顶部控制区域 -->
+        <StackLayout Grid.Row="0" Orientation="Vertical" Spacing="10" Margin="0,0,0,10">
+            
+            <!-- 统计信息 -->
+            <Frame BackgroundColor="LightBlue" Padding="10">
+                <StackLayout>
+                    <Label Text="📊 记录统计" FontAttributes="Bold" />
+                    <Label x:Name="StatsLabel" Text="正在加载..." FontSize="12" />
+                </StackLayout>
+            </Frame>
+            
+            <!-- 控制按钮 -->
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="5">
+                <Button x:Name="RefreshBtn" 
+                        Text="🔄 刷新" 
+                        Clicked="OnRefreshClicked"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Grid.Column="0" />
+                <Button x:Name="ExportBtn" 
+                        Text="📤 导出" 
+                        Clicked="OnExportClicked"
+                        BackgroundColor="Blue"
+                        TextColor="White"
+                        Grid.Column="1" />
+                <Button x:Name="ClearBtn" 
+                        Text="🗑️ 清空" 
+                        Clicked="OnClearClicked"
+                        BackgroundColor="Red"
+                        TextColor="White"
+                        Grid.Column="2" />
+            </Grid>
+            
+            <!-- 显示选项 -->
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                <Label Text="显示条数:" VerticalOptions="Center" Grid.Column="0" />
+                <Picker x:Name="MaxLinesPicker" 
+                        SelectedIndexChanged="OnMaxLinesChanged"
+                        Grid.Column="1">
+                    <Picker.Items>
+                        <x:String>100</x:String>
+                        <x:String>200</x:String>
+                        <x:String>500</x:String>
+                        <x:String>1000</x:String>
+                        <x:String>2000</x:String>
+                        <x:String>5000</x:String>
+                        <x:String>全部</x:String>
+                    </Picker.Items>
+                </Picker>
+                <Button x:Name="FilterBtn" 
+                        Text="🔍 筛选" 
+                        Clicked="OnFilterClicked"
+                        BackgroundColor="Orange"
+                        TextColor="White"
+                        Grid.Column="2" />
+            </Grid>
+        </StackLayout>
+
+        <!-- 历史记录显示区域 -->
+        <ScrollView Grid.Row="1">
+            <StackLayout>
+                <Label x:Name="HistoryLabel" 
+                       Text="正在加载历史记录..."
+                       FontFamily="Courier New"
+                       FontSize="11"
+                       BackgroundColor="Black"
+                       TextColor="LightGreen"
+                       Padding="10" />
+            </StackLayout>
+        </ScrollView>
+
+        <!-- 底部状态栏 -->
+        <Frame Grid.Row="2" BackgroundColor="LightGray" Padding="10" Margin="0,10,0,0">
+            <Label x:Name="StatusLabel" 
+                   Text="准备就绪" 
+                   FontSize="12" 
+                   HorizontalOptions="Center" />
+        </Frame>
+
+    </Grid>
+
+</ContentPage>

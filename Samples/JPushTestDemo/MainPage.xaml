@@ -79,6 +79,56 @@
                 </VerticalStackLayout>
             </Frame>
 
+            <!-- Broadcast History Section -->
+            <Frame BackgroundColor="LightGray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="📡 广播历史记录" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="查看JPush推送和广播的接收历史，支持多种显示条数选择" FontSize="12" TextColor="DarkGray" />
+                    
+                    <!-- 主要操作按钮 -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,5,0,0">
+                        <Button 
+                            x:Name="ViewHistoryBtn"
+                            Text="📋 快速查看" 
+                            Clicked="OnViewHistoryClicked"
+                            BackgroundColor="DarkSlateBlue"
+                            TextColor="White"
+                            FontSize="14"
+                            Grid.Column="0" />
+                        <Button 
+                            x:Name="DetailHistoryBtn"
+                            Text="📊 详细管理" 
+                            Clicked="OnDetailHistoryClicked"
+                            BackgroundColor="DarkBlue"
+                            TextColor="White"
+                            FontSize="14"
+                            Grid.Column="1" />
+                    </Grid>
+                    
+                    <!-- 辅助操作按钮 -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,5,0,0">
+                        <Button 
+                            x:Name="QuickViewRecentBtn"
+                            Text="⚡ 最近100条" 
+                            Clicked="OnQuickViewRecentClicked"
+                            BackgroundColor="Orange"
+                            TextColor="White"
+                            FontSize="12"
+                            Grid.Column="0" />
+                        <Button 
+                            x:Name="ClearHistoryBtn"
+                            Text="🗑️ 清空记录" 
+                            Clicked="OnClearHistoryClicked"
+                            BackgroundColor="DarkRed"
+                            TextColor="White"
+                            FontSize="12"
+                            Grid.Column="1" />
+                    </Grid>
+                    
+                    <Label x:Name="HistoryInfoLabel" Text="点击上方按钮查看历史记录" FontSize="11" TextColor="Gray" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
             <!-- Status Section -->
             <Frame BackgroundColor="LightYellow" Padding="15">
                 <VerticalStackLayout Spacing="10">

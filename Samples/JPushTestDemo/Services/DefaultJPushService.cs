@@ -67,4 +67,19 @@ public class DefaultJPushService : IJPushService
     {
         return "❌ 当前平台不支持JPush推送服务";
     }
+
+    public string GetBroadcastHistory(int maxLines = 200)
+    {
+        return "❌ 当前平台不支持广播历史记录功能";
+    }
+
+    public void ClearBroadcastHistory()
+    {
+        System.Diagnostics.Debug.WriteLine("DefaultJPushService.ClearBroadcastHistory (不支持当前平台)");
+    }
+
+    public string GetHistoryFileInfo()
+    {
+        return "❌ 当前平台不支持历史记录文件信息";
+    }
 }

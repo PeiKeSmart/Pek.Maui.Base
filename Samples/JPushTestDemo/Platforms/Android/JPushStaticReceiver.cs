@@ -99,6 +99,9 @@ namespace JPushTestDemo.Platforms.Android
                     Log.Info(TAG, $"[静态接收器] 内容: {content}");
                     Log.Info(TAG, $"[静态接收器] 附加数据: {extra}");
                     
+                    // 记录到持久化日志
+                    PersistentLogger.LogPushNotification(context, "通知接收", title, content, extra);
+                    
                     // 创建本地通知（简化逻辑，总是创建通知）
                     CreateLocalNotification(context, title, content);
                 }
@@ -106,6 +109,7 @@ namespace JPushTestDemo.Platforms.Android
             catch (System.Exception ex)
             {
                 Log.Error(TAG, $"[静态接收器] 处理通知接收事件失败: {ex.Message}", ex);
+                PersistentLogger.LogError(context, TAG, "处理通知接收事件失败", ex);
             }
         }
 

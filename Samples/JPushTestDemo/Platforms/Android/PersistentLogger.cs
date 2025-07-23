@@ -1,7 +1,9 @@
 using Android.Content;
 using Android.Util;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace JPushTestDemo.Platforms.Android
@@ -89,6 +91,54 @@ namespace JPushTestDemo.Platforms.Android
         }
 
         /// <summary>
+        /// 记录广播接收事件
+        /// </summary>
+        public static void LogBroadcastReceived(Context context, string action, string? title = null, string? content = null, string? extras = null)
+        {
+            var details = new StringBuilder();
+            details.AppendLine($"📡 广播接收: {action}");
+            
+            if (!string.IsNullOrEmpty(title))
+                details.AppendLine($"  标题: {title}");
+            if (!string.IsNullOrEmpty(content))
+                details.AppendLine($"  内容: {content}");
+            if (!string.IsNullOrEmpty(extras))
+                details.AppendLine($"  附加数据: {extras}");
+            
+            LogDiagnostic(context, "BROADCAST", details.ToString().TrimEnd());
+        }
+
+        /// <summary>
+        /// 记录推送通知事件
+        /// </summary>
+        public static void LogPushNotification(Context context, string type, string? title = null, string? content = null, string? extras = null)
+        {
+            var details = new StringBuilder();
+            details.AppendLine($"🔔 推送通知: {type}");
+            
+            if (!string.IsNullOrEmpty(title))
+                details.AppendLine($"  标题: {title}");
+            if (!string.IsNullOrEmpty(content))
+                details.AppendLine($"  内容: {content}");
+            if (!string.IsNullOrEmpty(extras))
+                details.AppendLine($"  附加数据: {extras}");
+            
+            LogDiagnostic(context, "PUSH", details.ToString().TrimEnd());
+        }
+
+        /// <summary>
+        /// 记录JPush状态变化
+        /// </summary>
+        public static void LogJPushStatus(Context context, string status, string? details = null)
+        {
+            string message = string.IsNullOrEmpty(details) ? 
+                $"📱 JPush状态: {status}" : 
+                $"📱 JPush状态: {status} - {details}";
+            
+            LogDiagnostic(context, "JPUSH", message);
+        }
+
+        /// <summary>
         /// 写入文件
         /// </summary>
         private static void WriteToFile(Context context, string content)
@@ -149,7 +199,7 @@ namespace JPushTestDemo.Platforms.Android
         /// <summary>
         /// 读取最近的日志（指定行数）
         /// </summary>
-        public static string ReadRecentLogs(Context context, int maxLines = 100)
+        public static string ReadRecentLogs(Context context, int maxLines = 500)
         {
             try
             {
@@ -159,7 +209,7 @@ namespace JPushTestDemo.Platforms.Android
                     return allLogs;
                 }
 
-                var lines = allLogs.Split('\n');
+                var lines = allLogs.Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 if (lines.Length <= maxLines)
                 {
                     return allLogs;
@@ -169,13 +219,93 @@ namespace JPushTestDemo.Platforms.Android
                 var recentLines = new string[maxLines];
                 Array.Copy(lines, lines.Length - maxLines, recentLines, 0, maxLines);
                 
-                return string.Join("\n", recentLines);
+                var result = string.Join("\n", recentLines);
+                
+                // 添加统计信息
+                var summary = $"=== 日志统计 ===\n显示最近 {maxLines} 条记录，总共 {lines.Length} 条记录\n\n";
+                return summary + result;
             }
             catch (Exception ex)
             {
                 Log.Error(TAG, $"读取最近日志失败: {ex.Message}", ex);
                 return $"读取最近日志失败: {ex.Message}";
             }
+        }
+
+        /// <summary>
+        /// 按日期范围读取日志
+        /// </summary>
+        public static string ReadLogsByDateRange(Context context, DateTime startDate, DateTime endDate, int maxLines = 500)
+        {
+            try
+            {
+                string allLogs = ReadAllLogs(context);
+                if (string.IsNullOrEmpty(allLogs) || allLogs == "暂无日志记录")
+                {
+                    return allLogs;
+                }
+
+                var lines = allLogs.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                var filteredLines = new List<string>();
+
+                foreach (var line in lines)
+                {
+                    if (TryParseLogTimestamp(line, out DateTime logTime))
+                    {
+                        if (logTime >= startDate && logTime <= endDate)
+                        {
+                            filteredLines.Add(line);
+                        }
+                    }
+                }
+
+                if (filteredLines.Count == 0)
+                {
+                    return $"指定时间范围内无日志记录\n时间范围: {startDate:yyyy-MM-dd HH:mm} - {endDate:yyyy-MM-dd HH:mm}";
+                }
+
+                // 限制返回的行数
+                if (filteredLines.Count > maxLines)
+                {
+                    filteredLines = filteredLines.Skip(filteredLines.Count - maxLines).ToList();
+                }
+
+                var summary = $"=== 时间范围日志 ===\n时间范围: {startDate:yyyy-MM-dd HH:mm} - {endDate:yyyy-MM-dd HH:mm}\n找到 {filteredLines.Count} 条记录\n\n";
+                return summary + string.Join("\n", filteredLines);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(TAG, $"按日期范围读取日志失败: {ex.Message}", ex);
+                return $"按日期范围读取日志失败: {ex.Message}";
+            }
+        }
+
+        /// <summary>
+        /// 尝试解析日志时间戳
+        /// </summary>
+        private static bool TryParseLogTimestamp(string logLine, out DateTime timestamp)
+        {
+            timestamp = DateTime.MinValue;
+            
+            try
+            {
+                // 日志格式: [2024-01-01 12:00:00.000] [TAG] message
+                if (logLine.StartsWith("[") && logLine.Contains("]"))
+                {
+                    int endIndex = logLine.IndexOf(']');
+                    if (endIndex > 1)
+                    {
+                        string timestampStr = logLine.Substring(1, endIndex - 1);
+                        return DateTime.TryParseExact(timestampStr, "yyyy-MM-dd HH:mm:ss.fff", null, System.Globalization.DateTimeStyles.None, out timestamp);
+                    }
+                }
+            }
+            catch
+            {
+                // 忽略解析错误
+            }
+            
+            return false;
         }
 
         /// <summary>

@@ -77,4 +77,22 @@ public interface IJPushService
     /// </summary>
     /// <returns>推送状态检查结果</returns>
     string CheckPushReceiveStatus();
+
+    /// <summary>
+    /// 获取广播历史记录
+    /// </summary>
+    /// <param name="maxLines">最大行数，默认500行</param>
+    /// <returns>历史记录内容</returns>
+    string GetBroadcastHistory(int maxLines = 500);
+
+    /// <summary>
+    /// 清空广播历史记录
+    /// </summary>
+    void ClearBroadcastHistory();
+
+    /// <summary>
+    /// 获取历史记录文件信息
+    /// </summary>
+    /// <returns>文件信息</returns>
+    string GetHistoryFileInfo();
 }
